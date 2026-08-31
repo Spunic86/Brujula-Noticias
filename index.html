@@ -1,1 +1,724 @@
- 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brújula · Lo importante. Claro. Breve.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0D1B2A;
+  --accent: #3B82F6;
+  --accent-light: #DBEAFE;
+  --bg: #F8FAFC;
+  --surface: #FFFFFF;
+  --border: #E2E8F0;
+  --text: #1F2937;
+  --text-2: #6B7280;
+  --text-3: #9CA3AF;
+  --green: #059669;
+  --green-light: #D1FAE5;
+  --amber: #D97706;
+  --amber-light: #FEF3C7;
+  --red: #DC2626;
+  --purple: #7C3AED;
+  --purple-light: #EDE9FE;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+}
+
+[data-theme="dark"] {
+  --navy: #E2E8F0;
+  --accent: #60A5FA;
+  --accent-light: #1E3A8A22;
+  --bg: #0F172A;
+  --surface: #1E293B;
+  --border: #334155;
+  --text: #F1F5F9;
+  --text-2: #94A3B8;
+  --text-3: #64748B;
+  --green-light: #05966920;
+  --amber-light: #D9770620;
+  --purple-light: #7C3AED20;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', -apple-system, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; transition: background 0.3s, color 0.3s; }
+
+/* ── TOPBAR ── */
+.topbar { position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); padding: 0 20px; height: 48px; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(12px); background: rgba(255,255,255,0.95); transition: background 0.3s, border-color 0.3s; gap: 16px; }
+[data-theme="dark"] .topbar { background: rgba(15,23,42,0.95); }
+.logo { display: flex; align-items: center; gap: 8px; text-decoration: none; flex-shrink: 0; }
+.logo-icon { width: 24px; height: 24px; }
+.logo-name { font-family: 'DM Serif Display', Georgia, serif; font-size: 18px; color: var(--navy); letter-spacing: -0.3px; transition: color 0.3s; }
+.logo-date { font-size: 12px; color: var(--text-3); font-weight: 400; padding-left: 12px; border-left: 1px solid var(--border); margin-left: 4px; white-space: nowrap; }
+
+/* Buscador en topbar */
+.topbar-search { flex: 1; max-width: 480px; }
+.topbar-search form { display: flex; align-items: center; background: var(--bg); border: 1px solid var(--border); border-radius: 99px; padding: 5px 6px 5px 14px; gap: 8px; transition: border-color 0.2s, box-shadow 0.2s; }
+.topbar-search form:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+.topbar-search svg { color: var(--text-3); width: 15px; height: 15px; flex-shrink: 0; }
+.topbar-search input { flex: 1; border: none; outline: none; font-size: 13px; font-family: 'DM Sans', sans-serif; color: var(--text); background: transparent; }
+.topbar-search input::placeholder { color: var(--text-3); }
+.topbar-search button { background: var(--accent); color: #fff; border: none; padding: 5px 14px; border-radius: 99px; font-size: 12px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
+.topbar-search button:hover { background: #2563EB; }
+
+.topbar-actions { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+.tb-btn { display: flex; align-items: center; gap: 5px; padding: 5px 10px; border: none; background: transparent; color: var(--text-2); font-size: 12px; font-family: 'DM Sans', sans-serif; border-radius: var(--radius-sm); cursor: pointer; transition: background 0.15s, color 0.15s; }
+.tb-btn:hover { background: var(--bg); color: var(--text); }
+.tb-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+/* ── BUSCADOR (hero eliminado, buscador movido al topbar) ── */
+.search-wrap { display: none; }
+
+/* ── NAV TABS ── */
+.nav-tabs { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 20px; display: flex; overflow-x: auto; scrollbar-width: none; transition: background 0.3s; }
+.nav-tabs::-webkit-scrollbar { display: none; }
+.nav-tab { padding: 10px 14px; font-size: 13px; font-weight: 500; color: var(--text-2); border: none; background: transparent; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; margin-bottom: -1px; font-family: 'DM Sans', sans-serif; transition: color 0.15s, border-color 0.15s; }
+.nav-tab:hover { color: var(--text); }
+.nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ── LAYOUT PRINCIPAL ── */
+.main { max-width: 1400px; margin: 0 auto; padding: 16px 20px 40px; }
+.feed { min-width: 0; max-width: 1400px; }
+.sidebar { display: flex; flex-direction: column; gap: 14px; }
+
+/* ── SECTION HEAD ── */
+.section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.section-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-2); display: flex; align-items: center; gap: 8px; }
+.section-title::before { content: ''; display: inline-block; width: 3px; height: 14px; background: var(--accent); border-radius: 2px; }
+.badge-live { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 600; color: var(--red); background: #FEE2E2; padding: 2px 8px; border-radius: 99px; }
+.badge-live::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--red); animation: blink 1s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* ── GRID 3 COLUMNAS ── */
+.news-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+
+/* ── TARJETA ── */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s; display: flex; flex-direction: column; }
+.card:hover { box-shadow: var(--shadow-md); border-color: #CBD5E1; transform: translateY(-2px); }
+
+/* LÍNEA DE COLOR IZQUIERDA (reemplaza el placeholder con fondo) */
+.card-accent-bar { width: 100%; height: 3px; flex-shrink: 0; }
+
+.card-body { padding: 12px 14px 14px; flex: 1; display: flex; flex-direction: column; }
+.card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; }
+
+/* CATEGORÍA: solo texto con línea izquierda, sin recuadro de color */
+.card-cat { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; display: flex; align-items: center; gap: 6px; }
+.card-cat::before { content: ''; display: inline-block; width: 3px; height: 12px; border-radius: 2px; flex-shrink: 0; }
+.cat-economia { color: var(--amber); }
+.cat-economia::before { background: var(--amber); }
+.cat-salud { color: var(--green); }
+.cat-salud::before { background: var(--green); }
+.cat-tecnologia { color: #1D4ED8; }
+.cat-tecnologia::before { background: #1D4ED8; }
+.cat-mundo { color: var(--purple); }
+.cat-mundo::before { background: var(--purple); }
+.cat-argentina { color: var(--red); }
+.cat-argentina::before { background: var(--red); }
+.cat-ciencia { color: #15803D; }
+.cat-ciencia::before { background: #15803D; }
+.cat-deportes { color: #C2410C; }
+.cat-deportes::before { background: #C2410C; }
+.cat-cultura { color: #9333EA; }
+.cat-cultura::before { background: #9333EA; }
+
+.card-time { font-size: 11px; color: var(--text-3); display: flex; align-items: center; gap: 3px; }
+.card-time svg { width: 11px; height: 11px; }
+.card-title { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.4; margin-bottom: 7px; flex: 1; transition: color 0.15s; }
+.card:hover .card-title { color: var(--accent); }
+.card-why { font-size: 11px; color: var(--text-2); line-height: 1.5; margin-bottom: 10px; padding: 7px 9px; background: var(--bg); border-radius: 6px; border-left: 2px solid var(--accent); transition: background 0.3s; }
+.card-why-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent); display: block; margin-bottom: 2px; }
+.card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+.card-source { font-size: 11px; color: var(--text-3); }
+.card-expand { display: flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 500; color: var(--accent); background: var(--accent-light); border: none; padding: 4px 10px; border-radius: 99px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.15s; }
+.card-expand:hover { background: #BFDBFE; }
+.card-expand svg { width: 11px; height: 11px; }
+
+/* ── EXPANDIDA ── */
+.card.expanded { grid-column: 1 / -1; cursor: default; }
+.card.expanded:hover { transform: none; box-shadow: none; }
+.expanded-bar { width: 100%; height: 4px; }
+.expanded-body { padding: 20px 24px; }
+.expanded-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 20px; color: var(--text); line-height: 1.3; margin-bottom: 16px; }
+.expanded-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.expanded-block { background: var(--bg); border-radius: var(--radius-sm); padding: 11px 13px; border: 1px solid var(--border); }
+.expanded-block-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 5px; }
+.expanded-block-text { font-size: 12px; color: var(--text); line-height: 1.55; }
+.expanded-sources { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.expanded-source-tag { font-size: 11px; color: var(--text-2); background: var(--bg); border: 1px solid var(--border); padding: 2px 9px; border-radius: 99px; }
+.expanded-footer { display: flex; align-items: center; justify-content: space-between; }
+.card-close { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; color: var(--text-2); background: var(--bg); border: 1px solid var(--border); padding: 6px 14px; border-radius: 99px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.15s; }
+.card-close:hover { background: var(--border); }
+.card-close svg { width: 13px; height: 13px; }
+
+/* ── LOAD MORE ── */
+.load-more { display: flex; justify-content: center; margin-top: 20px; }
+.load-btn { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 500; color: var(--accent); background: var(--surface); border: 1px solid var(--border); padding: 9px 22px; border-radius: 99px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.15s, border-color 0.15s; }
+.load-btn:hover { background: var(--accent-light); border-color: var(--accent); }
+
+/* ── SIDEBAR ── */
+.sb-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; transition: background 0.3s; }
+.sb-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-2); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.sb-title svg { width: 13px; height: 13px; }
+
+/* ── DATO CURIOSO — compact ── */
+.curiosity-block { background: linear-gradient(135deg, #4C1D95, #4338CA); border-radius: var(--radius); padding: 12px 14px; }
+.curiosity-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.curiosity-tag { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #C4B5FD; display: flex; align-items: center; gap: 5px; }
+.curiosity-cat-badge { font-size: 10px; color: #A78BFA; }
+.curiosity-text { font-size: 12px; color: #EDE9FE; line-height: 1.55; }
+.curiosity-refresh { background: rgba(255,255,255,0.15); border: none; border-radius: 99px; padding: 4px 7px; cursor: pointer; display: flex; align-items: center; color: #EDE9FE; transition: background 0.15s; flex-shrink: 0; }
+.curiosity-refresh:hover { background: rgba(255,255,255,0.28); }
+.curiosity-refresh svg { width: 13px; height: 13px; }
+
+/* ── QUÉ ME PERDÍ ── */
+.missed-item { display: flex; gap: 9px; padding: 8px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+.missed-item:last-child { border-bottom: none; padding-bottom: 0; }
+.missed-item:first-child { padding-top: 0; }
+.missed-dot { width: 5px; height: 5px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+.missed-text { font-size: 11px; color: var(--text); line-height: 1.4; }
+.missed-meta { font-size: 10px; color: var(--text-3); margin-top: 1px; }
+
+/* ── TENDENCIAS ── */
+.trend-item { display: flex; align-items: center; gap: 9px; padding: 7px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+.trend-item:last-child { border-bottom: none; }
+.trend-item:first-child { padding-top: 0; }
+.trend-num { font-size: 11px; font-weight: 600; color: var(--text-3); font-family: 'DM Mono', monospace; min-width: 18px; }
+.trend-text { font-size: 12px; color: var(--text); flex: 1; line-height: 1.35; }
+.trend-text:hover { color: var(--accent); }
+.trend-count { font-size: 10px; color: var(--text-3); }
+
+/* ── FOOTER ── */
+.footer { border-top: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; background: var(--surface); }
+.footer-brand { font-family: 'DM Serif Display', Georgia, serif; font-size: 14px; color: var(--text-2); }
+.footer-brand span { color: var(--accent); }
+.footer-links { display: flex; gap: 18px; }
+.footer-link { font-size: 11px; color: var(--text-3); cursor: pointer; text-decoration: none; transition: color 0.15s; }
+.footer-link:hover { color: var(--text); }
+.footer-update { font-size: 11px; color: var(--text-3); display: flex; align-items: center; gap: 5px; }
+.update-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: blink 2s infinite; }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+.card { animation: fadeUp 0.25s ease both; }
+.card:nth-child(1){animation-delay:.04s} .card:nth-child(2){animation-delay:.07s} .card:nth-child(3){animation-delay:.10s}
+.card:nth-child(4){animation-delay:.13s} .card:nth-child(5){animation-delay:.16s} .card:nth-child(6){animation-delay:.19s}
+.card:nth-child(7){animation-delay:.22s} .card:nth-child(8){animation-delay:.25s} .card:nth-child(9){animation-delay:.28s}
+
+@media (max-width:1100px){ .main{grid-template-columns:1fr} .sidebar{display:none} }
+@media (max-width:800px){ .news-grid{grid-template-columns:1fr 1fr} }
+@media (max-width:540px){ .news-grid{grid-template-columns:1fr} .hero-title{font-size:24px} .main{padding:14px} }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <a class="logo" href="#">
+    <svg class="logo-icon" viewBox="0 0 28 28" fill="none">
+      <circle cx="14" cy="14" r="12.5" stroke="#1E3A8A" stroke-width="1.5"/>
+      <circle cx="14" cy="14" r="2" fill="#1E3A8A"/>
+      <line x1="14" y1="3" x2="14" y2="8" stroke="#1E3A8A" stroke-width="2" stroke-linecap="round"/>
+      <line x1="14" y1="20" x2="14" y2="25" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round"/>
+      <line x1="3" y1="14" x2="8" y2="14" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round"/>
+      <line x1="20" y1="14" x2="25" y2="14" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round"/>
+      <polygon points="14,4 16,12 14,14 12,12" fill="#1E3A8A"/>
+      <polygon points="14,24 12,16 14,14 16,16" fill="#9CA3AF"/>
+    </svg>
+    <span class="logo-name">brújula</span>
+    <span class="logo-date" id="topbarFecha"></span>
+  </a>
+
+  <div class="topbar-search">
+    <form onsubmit="doSearch(event)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Buscar en Google…" autocomplete="off">
+      <button type="submit">Buscar</button>
+    </form>
+  </div>
+
+  <div class="topbar-actions">
+    <button class="tb-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      Guardados
+    </button>
+    <button class="tb-btn" onclick="toggleTheme()">
+      <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    </button>
+    <button class="tb-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- TABS -->
+<nav class="nav-tabs">
+  <button class="nav-tab active" data-cat="all"        onclick="setTab(this)">Hoy</button>
+  <button class="nav-tab"        data-cat="semana"     onclick="setTab(this)">Semana</button>
+  <button class="nav-tab"        data-cat="argentina"  onclick="setTab(this)">Argentina</button>
+  <button class="nav-tab"        data-cat="mundo"      onclick="setTab(this)">Mundo</button>
+  <button class="nav-tab"        data-cat="economia"   onclick="setTab(this)">Economía</button>
+  <button class="nav-tab"        data-cat="tecnologia" onclick="setTab(this)">Tecnología</button>
+  <button class="nav-tab"        data-cat="ciencia"    onclick="setTab(this)">Ciencia</button>
+  <button class="nav-tab"        data-cat="salud"      onclick="setTab(this)">Salud</button>
+  <button class="nav-tab"        data-cat="cultura"    onclick="setTab(this)">Cultura</button>
+  <button class="nav-tab"        data-cat="deportes"   onclick="setTab(this)">Deportes</button>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="feed">
+    <div class="section-head">
+      <span class="section-title">Noticias del día</span>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span id="fechaBadge" style="font-size:11px;color:var(--text-2);font-weight:500;"></span>
+        <span class="badge-live">En vivo</span>
+      </div>
+    </div>
+    <div class="news-grid" id="newsGrid"></div>
+    <div class="load-more">
+      <button class="load-btn" onclick="loadMore()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        Ver más noticias
+      </button>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-brand"><span>brújula</span> · Lo importante. Claro. Breve.</div>
+  <div class="footer-links">
+    <a class="footer-link" href="#">Acerca</a>
+    <a class="footer-link" href="#">Fuentes</a>
+    <a class="footer-link" href="#">Contribuir</a>
+    <a class="footer-link" href="#">Contacto</a>
+  </div>
+  <div class="footer-update">
+    <div class="update-dot"></div>
+    <span id="footerUpdate">Actualizado hoy</span>
+  </div>
+</footer>
+
+<script>
+// ── DATOS DE NOTICIAS (18) ──
+const newsData = [
+  { id:'n1',  cat:'argentina',  catLabel:'Argentina',  color:'#DC2626', accentColor:'#FEE2E2', emoji:'🏗️', time:'3 min', source:'La Nación',        sourceTime:'5h',
+    title:'Diputados aprobó el Súper RIGI: megainversiones en IA, baterías y energía',
+    why:'Si entra en vigencia, puede atraer miles de millones en sectores que hoy no existen en Argentina. Cambiaría el perfil exportador del país.',
+    resumen:'La Cámara de Diputados aprobó el Súper RIGI con 130 votos a favor y 106 en contra. El régimen ofrece estabilidad fiscal por 30 años para proyectos de más de USD 1.000 millones en sectores como IA, data centers, baterías de litio y energía solar.',
+    contexto:'El RIGI original ya vigente se aplica a sectores tradicionales como petróleo y minería. El Súper RIGI apunta a "industrias del futuro" que Argentina hoy no produce.',
+    impacto:'Ganancias al 15% (vs 25% del RIGI estándar), sin aranceles de importación por años, y estabilidad tributaria garantizada. La oposición advierte que son "zonas liberadas sin control".',
+    cambia:'Va al Senado donde el oficialismo tiene votos para aprobarlo. Si pasa, los primeros proyectos podrían anunciarse antes de fin de año.',
+    fuentes:['La Nación','Infobae','Fortunaweb','iProfesional'] },
+
+  { id:'n2',  cat:'economia',   catLabel:'Economía',   color:'#D97706', accentColor:'#FEF3C7', emoji:'📉', time:'3 min', source:'Infobae',           sourceTime:'4h',
+    title:'MSCI deja a Argentina como "mercado aislado": acciones caen hasta 7%',
+    why:'Mientras Argentina siga en la categoría más baja, los grandes fondos internacionales no pueden invertir. Afecta el valor de acciones y el costo de financiamiento.',
+    resumen:'MSCI mantuvo a Argentina en la clasificación "standalone" (mercado aislado), la más baja del índice. El S&P Merval cayó 4.4% en pesos y acciones bancarias perdieron hasta 7% (BBVA -7%, Supervielle -6.9%).',
+    contexto:'Argentina acumula deficiencias en 7 de los 18 criterios de MSCI, concentradas en movilidad de capitales y funcionamiento del mercado cambiario. El cepo sigue siendo la barrera principal.',
+    impacto:'Los bonos soberanos resistieron mejor: el Global 2046 subió 0.7%. El riesgo país se mantuvo en 436 puntos. Sin reclasificación, los grandes fondos indexados no pueden comprar acciones argentinas.',
+    cambia:'La próxima revisión será en junio de 2027. Para entonces, el cepo debería estar levantado y el mercado normalizado para aspirar a "mercado frontera".',
+    fuentes:['Infobae','La Nación','Perfil','Ambito'] },
+
+  { id:'n3',  cat:'economia',   catLabel:'Economía',   color:'#D97706', accentColor:'#FEF3C7', emoji:'💰', time:'2 min', source:'Infobae',           sourceTime:'6h',
+    title:'Inflación junio en 2.1%: salario mínimo de $367.800 queda debajo de los precios',
+    why:'Si el sueldo mínimo sube 1.3% y los precios suben 2.1%, el bolsillo pierde terreno. La tendencia es positiva pero el poder adquisitivo sigue en recuperación.',
+    resumen:'El mercado proyecta inflación de 2.1% para junio, desacelerando respecto al 2.6% de mayo. El Salario Mínimo, Vital y Móvil se fijó en $367.800, un aumento de 1.32%, por debajo del ritmo de precios.',
+    contexto:'La inflación acumulada hasta mayo fue del 14.7%. El dólar oficial subió apenas 1.5% en el año. El Gobierno aspira a perforar el 2% mensual en el segundo semestre.',
+    impacto:'Los trabajadores informales y monotributistas categorías bajas son los más afectados. Sectores con paritarias actualizadas están mejor cubiertos.',
+    cambia:'Si el dato oficial de junio confirma 2.1%, sería la inflación mensual más baja del actual período de gobierno. INDEC publica el dato oficial en julio.',
+    fuentes:['Infobae','La Nación','INDEC','El Cronista'] },
+
+  { id:'n4',  cat:'mundo',      catLabel:'Mundo',      color:'#7C3AED', accentColor:'#EDE9FE', emoji:'🆘', time:'4 min', source:'Proceso',            sourceTime:'3h',
+    title:'Terremoto Venezuela: 164 muertos, casi 1.000 heridos y rescatistas contra el reloj',
+    why:'Es el peor sismo en Venezuela en más de un siglo. Miles de personas siguen bajo escombros. La respuesta internacional es masiva pero el tiempo se acota.',
+    resumen:'Dos terremotos de magnitud 7.2 y 7.5 sacudieron Venezuela el miércoles por la noche. Al menos 164 personas murieron y 971 resultaron heridas. La zona costera de La Guaira fue declarada zona de desastre con más de 120 edificios colapsados.',
+    contexto:'Venezuela ya atravesaba una crisis humanitaria preexistente. Los sismos de esta magnitud no se registraban en el país desde hace más de 100 años. La infraestructura estaba deteriorada antes del desastre.',
+    impacto:'Rescatistas de Países Bajos (60 especialistas), Suiza (80 socorristas y 18 toneladas de equipo) y Chile ya se dirigen al país. La presidenta encargada Delcy Rodríguez pidió maquinaria pesada para los escombros.',
+    cambia:'La ONU coordina la llegada de equipos certificados de búsqueda y rescate. Las réplicas continúan dificultando las operaciones. El número de víctimas seguirá subiendo.',
+    fuentes:['Proceso','El Tiempo','Yahoo Noticias','RTVC'] },
+
+  { id:'n5',  cat:'argentina',  catLabel:'Argentina',  color:'#DC2626', accentColor:'#FEE2E2', emoji:'🏠', time:'2 min', source:'La Nación',        sourceTime:'3h',
+    title:'Caputo: créditos hipotecarios en dólares podrían volver vía mercado de capitales',
+    why:'Sería la primera vez desde 2001 que podés acceder a un préstamo hipotecario en dólares de largo plazo. Tasas más bajas, pero el riesgo cambiario es tuyo.',
+    resumen:'El ministro Luis Caputo señaló que los créditos hipotecarios en dólares podrían desarrollarse a través del mercado de capitales, sin depender del sistema bancario tradicional. No dio fechas ni montos concretos.',
+    contexto:'Los créditos hipotecarios en dólares desaparecieron tras el corralito de 2001. Hoy los préstamos UVA en pesos son la única alternativa, con cuotas que ajustan por inflación.',
+    impacto:'Un hipotecario en dólares implicaría tasas entorno al 5-7% anual vs UVA, pero quien gana en pesos asume el riesgo cambiario si el dólar sube.',
+    cambia:'Requiere normalización cambiaria y del mercado de capitales. Es una señal de dirección del Gobierno, no una medida inmediata.',
+    fuentes:['La Nación','Infobae','El Cronista','Ámbito'] },
+
+  { id:'n6',  cat:'deportes',   catLabel:'Deportes',   color:'#C2410C', accentColor:'#FFF7ED', emoji:'🏆', time:'3 min', source:'TyC Sports',        sourceTime:'2h',
+    title:'Argentina clasificó a octavos: hoy 6 equipos más definen su futuro en el Mundial',
+    why:'Argentina sigue en carrera. Hoy se define quién puede ser rival en octavos. Australia, Paraguay, Turquía y Japón pelean clasificación.',
+    resumen:'Argentina ya aseguró su clasificación a los 16avos del Mundial 2026 con su victoria 2-0 ante Austria, con gol de Lionel Messi. Hoy juegan los grupos D, E y F: Ecuador vs Alemania, Países Bajos vs Túnez, Japón vs Suecia, Paraguay vs Australia y Turquía vs Estados Unidos.',
+    contexto:'Argentina está en el Grupo J, invicto. La fase de eliminación directa arranca el domingo 28 de junio. El cuadro completo se conoce esta noche.',
+    impacto:'Seis equipos definen hoy si siguen o vuelven a casa. Alemania, Estados Unidos, Países Bajos y Suecia son los favoritos de sus grupos pero nada está cerrado.',
+    cambia:'Los 16avos de final comienzan el domingo 28. Con los resultados de hoy, se arma el cuadro completo de la siguiente fase.',
+    fuentes:['TyC Sports','ESPN','Rosario3','FIFA'] },
+
+  { id:'n7',  cat:'deportes',   catLabel:'Deportes',   color:'#C2410C', accentColor:'#FFF7ED', emoji:'⚽', time:'2 min', source:'Infobae Deportes', sourceTime:'1d',
+    title:'Neymar volvió al Mundial tras 981 días: Brasil goleó 3-0 a Escocia',
+    why:'El regreso más esperado del torneo. Con Neymar disponible, Brasil es candidato al título. Potencial rival de Argentina en cuartos si ambos avanzan.',
+    resumen:'Neymar disputó su primer partido oficial con Brasil después de 981 días de ausencia por lesiones. La Canarinha goleó 3-0 a Escocia en la fase de grupos, con el delantero mostrando buenas sensaciones en los minutos que jugó.',
+    contexto:'Neymar acumuló graves lesiones de rodilla y tobillo que lo mantuvieron alejado desde el Mundial de Qatar 2022. Su regreso era la gran incógnita del equipo de Dorival Junior.',
+    impacto:'Con Neymar disponible, Brasil se convierte en uno de los máximos candidatos al título. Ya aseguró el primer puesto de su grupo.',
+    cambia:'El crack estará en octavos de final. Si Argentina y Brasil avanzan, podrían enfrentarse en cuartos en el mayor clásico del fútbol mundial.',
+    fuentes:['Infobae Deportes','TyC Sports','ESPN Brasil','FIFA'] },
+
+  { id:'n8',  cat:'deportes',   catLabel:'Deportes',   color:'#C2410C', accentColor:'#FFF7ED', emoji:'🇲🇽', time:'2 min', source:'Infobae Deportes', sourceTime:'1d',
+    title:'México hace historia en el Mundial: puntaje perfecto por primera vez con 3-0 a Rep. Checa',
+    why:'El anfitrión del Mundial nunca había terminado primero en su grupo con puntaje ideal. La mejor versión del Tri en décadas.',
+    resumen:'México goleó 3-0 a República Checa y terminó el Grupo A como puntero con puntaje perfecto (9 puntos, 3 victorias), algo que jamás había logrado en su historia mundialista.',
+    contexto:'México habitualmente clasificaba en el último minuto y tenía el karma de caer en octavos. Este torneo local los impulsó a una mejor versión frente a su propia hinchada.',
+    impacto:'Como puntero de grupo, México tendrá llave favorable en los 16avos. Se posiciona como sorpresa del torneo junto a Japón.',
+    cambia:'El partido de octavos de México se jugará entre el 28 y el 30 de junio. La afición espera romper el histórico "quinto partido" por primera vez.',
+    fuentes:['Infobae Deportes','La Nación','FIFA','ESPN México'] },
+
+  { id:'n9',  cat:'tecnologia', catLabel:'Tecnología', color:'#1D4ED8', accentColor:'#DBEAFE', emoji:'🤖', time:'3 min', source:'DominaInternet',    sourceTime:'8h',
+    title:'Anthropic lanzó Claude Fable 5: puede trabajar días enteros sin supervisión humana',
+    why:'Si tenés tareas repetitivas o proyectos largos de investigación o código, este modelo puede hacerlas solo mientras dormís. Cambia cómo se trabaja con IA.',
+    resumen:'Anthropic presentó Claude Fable 5, capaz de ejecutar flujos de trabajo que duran días completos sin intervención humana. Tiene alto rendimiento en ingeniería de software, investigación científica y análisis de datos complejos.',
+    contexto:'Los modelos de IA anteriores requerían supervisión constante en tareas largas. Claude Fable 5 introduce agencia extendida con planificación y corrección autónoma.',
+    impacto:'El 65% del código de Anthropic ya pasa por una versión interna de esta herramienta. También lanzó un modo "ambient" en Slack que monitorea conversaciones y sugiere acciones proactivas.',
+    cambia:'Abre la era de los agentes de IA laborales. Compite directamente con los modelos de OpenAI y Google en el mercado enterprise.',
+    fuentes:['DominaInternet','Multiplicalia','DiarioBitcoin','Infobae'] },
+
+  { id:'n10', cat:'tecnologia', catLabel:'Tecnología', color:'#1D4ED8', accentColor:'#DBEAFE', emoji:'⚖️', time:'3 min', source:'Multiplicalia',     sourceTime:'12h',
+    title:'EU AI Act: la regulación de IA más estricta del mundo entra en vigor el 2 de agosto',
+    why:'Si usás herramientas de IA en el trabajo o en tu empresa, necesitás saber qué cambia. Las empresas que no cumplan enfrentan multas del 3% de facturación global.',
+    resumen:'El Reglamento de Inteligencia Artificial de la Unión Europea entra en plena aplicación el 2 de agosto de 2026. Obliga a los sistemas de IA de alto riesgo a pasar auditorías, revelar datos de entrenamiento y publicar evaluaciones de sesgos.',
+    contexto:'La UE viene desarrollando esta regulación desde 2021. Es la primera ley vinculante y comprehensiva sobre IA en el mundo. Aplica a cualquier empresa que opere en la UE.',
+    impacto:'OpenAI, Google, Meta y Anthropic deberán ajustar cómo documentan y publican información sobre sus modelos. Las empresas que no cumplan enfrentan multas millonarias.',
+    cambia:'A partir del 2 de agosto, los sistemas de IA en decisiones críticas (salud, justicia, crédito) deberán publicar auditorías anuales. Se espera que el modelo se exporte a otros países.',
+    fuentes:['Multiplicalia','ExtraConfidencial','InternacionalWeb','European Commission'] },
+
+  { id:'n11', cat:'tecnologia', catLabel:'Tecnología', color:'#1D4ED8', accentColor:'#DBEAFE', emoji:'🕵️', time:'2 min', source:'Multiplicalia',     sourceTime:'10h',
+    title:'"Shadow AI": empleados usan IA no autorizada y exponen datos sensibles de las empresas',
+    why:'Si en tu empresa no hay política de uso de IA, probablemente ya tenés este problema. Datos de clientes, contratos y estrategias podrían estar siendo procesados por servidores externos.',
+    resumen:'El fenómeno de la "shadow AI" se aceleró en 2026. Empleados que usan herramientas de IA no aprobadas por sus empresas generan fugas de datos de propiedad intelectual y exposición de información confidencial.',
+    contexto:'El avance de modelos accesibles y gratuitos como ChatGPT, Claude y Gemini hizo que muchos trabajadores los usen para tareas laborales sin consultar a IT ni a Legales.',
+    impacto:'Las empresas europeas deben regularizar el uso interno de IA antes del 2 de agosto por el EU AI Act. En Argentina no hay regulación equivalente pero el riesgo existe igualmente.',
+    cambia:'Varias compañías globales lanzaron políticas de "IA aprobada" en 2026. El mercado de herramientas de IA enterprise segura está creciendo aceleradamente.',
+    fuentes:['Multiplicalia','DominaInternet','ExtraConfidencial','DiarioBitcoin'] },
+
+  { id:'n12', cat:'mundo',      catLabel:'Mundo',      color:'#7C3AED', accentColor:'#EDE9FE', emoji:'💥', time:'3 min', source:'El Orden Mundial',  sourceTime:'8h',
+    title:'Israel atacó Irán: casi dos semanas de hostilidades, la escalada más grave en décadas',
+    why:'Una guerra entre Israel e Irán afecta el precio del petróleo y la seguridad global. Argentina importa combustibles, así que cualquier shock energético te llega al bolsillo.',
+    resumen:'Los ataques israelíes contra Irán se extendieron por casi dos semanas en junio de 2026, marcando el enfrentamiento directo más grave entre ambos países en décadas. El conflicto involucra instalaciones militares con riesgo de escalar a infraestructura nuclear.',
+    contexto:'Israel e Irán venían en guerra por delegación a través de grupos como Hezbollah y Hamas. Junio de 2026 marcó el primer enfrentamiento directo y sostenido en el tiempo.',
+    impacto:'El precio del petróleo respondió con volatilidad. Los mercados globales operaron con cautela. Varios países piden desescalada en el Consejo de Seguridad de la ONU.',
+    cambia:'La situación sigue activa. Un ataque israelí contra instalaciones nucleares iraníes llevaría el conflicto a una dimensión nueva. La comunidad internacional presiona por cese de fuego.',
+    fuentes:['El Orden Mundial','Crisis Group','Yahoo Noticias','CIDOB'] },
+
+  { id:'n13', cat:'mundo',      catLabel:'Mundo',      color:'#7C3AED', accentColor:'#EDE9FE', emoji:'🕊️', time:'2 min', source:'CIDOB',             sourceTime:'1d',
+    title:'Ucrania supera la duración de la Primera Guerra Mundial: más de 4 años de conflicto',
+    why:'Una guerra que parecía corta ya es más larga que la Gran Guerra. Afecta los precios de alimentos y energía que sentís en el supermercado argentino.',
+    resumen:'La guerra en Ucrania superó en junio de 2026 la duración total de la Primera Guerra Mundial (1.568 días). Rusia avanza lentamente en el Donbás y los bombardeos a centros urbanos continúan sin señales de negociación.',
+    contexto:'La guerra comenzó el 24 de febrero de 2022. Ningún intento de paz ha prosperado. La fatiga de Occidente en el apoyo militar a Ucrania genera incertidumbre.',
+    impacto:'Los precios del trigo y el girasol siguen afectados. Ucrania era el granero del mundo junto con Rusia. Argentina, competidora en cereales, sigue exportando en un mercado con oferta reducida.',
+    cambia:'Sin acuerdo a la vista, el conflicto podría extenderse por años más. La ONU y varios países buscan reiniciar negociaciones sin éxito hasta ahora.',
+    fuentes:['CIDOB','El Orden Mundial','Crisis Group','ONU'] },
+
+  { id:'n14', cat:'salud',      catLabel:'Salud',      color:'#059669', accentColor:'#D1FAE5', emoji:'🦟', time:'3 min', source:'Infobae Salud',    sourceTime:'5h',
+    title:'Más del 50% de adultos argentinos ya tuvo dengue: alertas por segunda infección',
+    why:'Si ya tuviste dengue, el segundo contagio con una cepa diferente puede ser más grave. Este dato cambia las recomendaciones de prevención para vos.',
+    resumen:'Un estudio indica que más del 50% de los adultos en Argentina ya estuvo expuesto al dengue al menos una vez. Los casos confirmados en la temporada 2025/2026 son bajos (66 hasta ahora), pero la alta seroprevalencia genera nuevos riesgos.',
+    contexto:'Las temporadas récord de 2023 y 2024/2025 dejaron a más de la mitad de la población adulta expuesta. La vacuna Qdenga está aprobada y en investigación para mayores de 45 años.',
+    impacto:'La segunda infección con un serotipo diferente puede causar dengue hemorrágico, más peligroso. La alta seroprevalencia hace crítica la prevención de criaderos de mosquitos en casa.',
+    cambia:'Se buscan voluntarios mayores de 45 años para los ensayos de la vacuna Qdenga. Extender esa cobertura es el próximo paso del sistema de salud.',
+    fuentes:['Infobae Salud','La Nación','Ministerio de Salud','WHO'] },
+
+  { id:'n15', cat:'ciencia',    catLabel:'Ciencia',    color:'#15803D', accentColor:'#F0FDF4', emoji:'🩸', time:'3 min', source:'National Geographic', sourceTime:'1d',
+    title:'Análisis de sangre detecta 50 tipos de cáncer: ensayo histórico con 140.000 voluntarios en UK',
+    why:'Una sola muestra de sangre podría detectar cánceres sin síntomas. Es el diagnóstico temprano más ambicioso de la historia de la medicina.',
+    resumen:'El mayor ensayo de detección de cáncer mediante análisis de sangre publica sus primeros resultados. Con más de 140.000 participantes en el Reino Unido, evalúa si una prueba puede detectar señales de más de 50 tipos de cáncer antes de que aparezcan síntomas.',
+    contexto:'La detección temprana multiplica las posibilidades de sobrevivencia en la mayoría de los cánceres. Hoy, muchos tumores se diagnostican en etapas avanzadas por falta de síntomas precoces.',
+    impacto:'Si los resultados son positivos, podría convertirse en una prueba de rutina en sistemas de salud del mundo. En Argentina llegaría con años de retraso, pero marca la dirección de la medicina preventiva.',
+    cambia:'Los primeros resultados preliminares se publican en 2026. Si son positivos, comenzará el proceso de aprobación regulatoria en EE.UU. y Europa para 2028-2029.',
+    fuentes:['National Geographic','Infobae Ciencia','redamgen','Nature'] },
+
+  { id:'n16', cat:'argentina',  catLabel:'Argentina',  color:'#DC2626', accentColor:'#FEE2E2', emoji:'📊', time:'2 min', source:'Infobae',           sourceTime:'4h',
+    title:'Riesgo país en 429 puntos: mínimos recientes y Wall Street cómodo con el Gobierno',
+    why:'Menos riesgo país significa que Argentina paga menos para financiarse. Es el termómetro de confianza exterior que afecta la inversión y el empleo a largo plazo.',
+    resumen:'El riesgo país medido por JP Morgan bajó 7 puntos a 429 unidades. El asesor Javier Timerman señaló que "Wall Street se siente cómodo con la política del Gobierno", aunque la decisión de MSCI muestra que queda camino por recorrer.',
+    contexto:'En enero de 2024 el riesgo país superaba los 1.800 puntos. La baja sostenida refleja mejora en la percepción internacional. El dólar oficial acumula solo 1.5% de suba en el año vs 14.7% de inflación.',
+    impacto:'Un riesgo país bajo permite al Gobierno acceder a crédito externo más barato. Caputo ya mencionó la posibilidad de emitir deuda en dólares si el indicador sigue bajando.',
+    cambia:'La clave para la siguiente etapa es levantar el cepo cambiario sin presionar el tipo de cambio. Es la variable central de la segunda mitad del año.',
+    fuentes:['Infobae','La Nación','Perfil','El Cronista'] },
+
+  { id:'n17', cat:'ciencia',    catLabel:'Ciencia',    color:'#15803D', accentColor:'#F0FDF4', emoji:'🫁', time:'2 min', source:'Infobae Ciencia',  sourceTime:'2d',
+    title:'Descubren interruptor molecular en pulmones: abre camino a nuevos tratamientos',
+    why:'Las enfermedades pulmonares crónicas como EPOC y fibrosis afectan a millones. Este hallazgo podría cambiar cómo se tratan en los próximos años.',
+    resumen:'Investigadores de Genesis identificaron el mecanismo molecular que determina si ciertas células del pulmón reparan tejido o combaten infecciones. El hallazgo podría permitir programar la respuesta celular de forma más precisa que los tratamientos actuales.',
+    contexto:'Las enfermedades pulmonares crónicas no tienen cura hoy: solo se manejan síntomas. La biología molecular viene abriendo posibilidades inéditas con edición génica CRISPR y mapeo celular.',
+    impacto:'A corto plazo no hay tratamiento nuevo. A mediano plazo, el hallazgo podría guiar el desarrollo de medicamentos que activen selectivamente la regeneración pulmonar.',
+    cambia:'El estudio abre una línea de investigación concreta. Se esperan ensayos clínicos en los próximos 3 a 5 años.',
+    fuentes:['Infobae Ciencia','Consultor Salud','National Geographic','ASCO'] },
+
+  { id:'n18', cat:'mundo',      catLabel:'Mundo',      color:'#7C3AED', accentColor:'#EDE9FE', emoji:'🤝', time:'2 min', source:'El Tiempo',         sourceTime:'3h',
+    title:'Venezuela: ayuda internacional llega tras el peor sismo en un siglo',
+    why:'La respuesta humanitaria rápida puede salvar vidas en las próximas 72 horas. Es también una ventana de diálogo político en un país aislado diplomáticamente.',
+    resumen:'Equipos de rescate de Países Bajos (60 especialistas), Suiza (80 socorristas, 18 toneladas de equipamiento) y Chile se dirigen a Venezuela tras los terremotos de magnitud 7.2 y 7.5. La ONU coordinó el envío de equipos certificados de búsqueda y rescate.',
+    contexto:'Venezuela estaba aislada diplomáticamente antes del sismo. La crisis humanitaria preexistente agrava la capacidad de respuesta interna. Delcy Rodríguez pidió ayuda internacional de forma explícita.',
+    impacto:'La asistencia internacional abre canales de cooperación que el régimen de Maduro había restringido. Las 72 horas siguientes son críticas para los sobrevivientes atrapados.',
+    cambia:'La comunidad internacional verá cómo el Gobierno venezolano gestiona la crisis. La magnitud del desastre podría acelerar conversaciones sobre la situación política del país.',
+    fuentes:['El Tiempo','Proceso','Yahoo Noticias','ONU'] }
+]
+
+// ── RENDER NOTICIAS ──
+let expandedId = null;
+
+function renderNews(data) {
+  const grid = document.getElementById('newsGrid');
+  grid.innerHTML = '';
+  data.forEach(n => {
+    const card = document.createElement('article');
+    card.className = 'card';
+    card.id = n.id;
+    card.innerHTML = cardHTML(n);
+    grid.appendChild(card);
+  });
+}
+
+function cardHTML(n) {
+  return `
+    <div class="card-accent-bar" style="background:${n.color}"></div>
+    <div class="card-body">
+      <div class="card-top">
+        <span class="card-cat cat-${n.cat}">${n.catLabel}</span>
+        <span class="card-time">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          ${n.time}
+        </span>
+      </div>
+      <h2 class="card-title">${n.title}</h2>
+      <div class="card-why">
+        <span class="card-why-label">¿Por qué importa?</span>
+        ${n.why}
+      </div>
+      <div class="card-footer">
+        <span class="card-source">${n.source} · ${n.sourceTime}</span>
+        <button class="card-expand" onclick="expandCard('${n.id}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
+          + Ampliar
+        </button>
+      </div>
+    </div>`;
+}
+
+function expandCard(id) {
+  if (expandedId === id) { collapseCard(id); return; }
+  if (expandedId) collapseCard(expandedId);
+
+  const n = newsData.find(x => x.id === id);
+  const card = document.getElementById(id);
+  if (!n || !card) return;
+
+  expandedId = id;
+  card.classList.add('expanded');
+  card.innerHTML = `
+    <div class="expanded-bar" style="background:${n.color}"></div>
+    <div class="expanded-body">
+      <div class="card-top" style="margin-bottom:12px">
+        <span class="card-cat cat-${n.cat}">${n.catLabel}</span>
+        <span class="card-time">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          ${n.time}
+        </span>
+      </div>
+      <h2 class="expanded-title">${n.title}</h2>
+      <div class="expanded-grid">
+        <div class="expanded-block">
+          <div class="expanded-block-label" style="color:${n.color}">Resumen ampliado</div>
+          <p class="expanded-block-text">${n.resumen}</p>
+        </div>
+        <div class="expanded-block">
+          <div class="expanded-block-label" style="color:#7C3AED">Contexto</div>
+          <p class="expanded-block-text">${n.contexto}</p>
+        </div>
+        <div class="expanded-block">
+          <div class="expanded-block-label" style="color:#D97706">Impacto esperado</div>
+          <p class="expanded-block-text">${n.impacto}</p>
+        </div>
+        <div class="expanded-block">
+          <div class="expanded-block-label" style="color:#059669">¿Qué cambia?</div>
+          <p class="expanded-block-text">${n.cambia}</p>
+        </div>
+      </div>
+      <div style="margin-bottom:12px">
+        <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text-2);margin-bottom:7px">Fuentes</div>
+        <div class="expanded-sources">${n.fuentes.map(f=>`<span class="expanded-source-tag">${f}</span>`).join('')}</div>
+      </div>
+      <div class="expanded-footer">
+        <button class="card-close" onclick="collapseCard('${id}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          Cerrar
+        </button>
+        <div style="display:flex;gap:7px">
+          <button style="display:flex;align-items:center;gap:4px;font-size:12px;font-weight:500;color:var(--text-2);background:var(--bg);border:1px solid var(--border);padding:5px 12px;border-radius:99px;cursor:pointer;font-family:'DM Sans',sans-serif;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>Guardar
+          </button>
+          <button style="display:flex;align-items:center;gap:4px;font-size:12px;font-weight:500;color:var(--accent);background:var(--accent-light);border:none;padding:5px 12px;border-radius:99px;cursor:pointer;font-family:'DM Sans',sans-serif;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Compartir
+          </button>
+        </div>
+      </div>
+    </div>`;
+  setTimeout(() => card.scrollIntoView({ behavior:'smooth', block:'start' }), 80);
+}
+
+function collapseCard(id) {
+  const n = newsData.find(x => x.id === id);
+  const card = document.getElementById(id);
+  if (!n || !card) return;
+  card.classList.remove('expanded');
+  card.innerHTML = cardHTML(n);
+  expandedId = null;
+}
+
+// ── DARK MODE ──
+function toggleTheme() {
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', dark ? '' : 'dark');
+  document.getElementById('themeIcon').innerHTML = dark
+    ? '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>'
+    : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+}
+
+// ── TABS + FILTRO ──
+let activeFilter = 'all';
+
+function setTab(el) {
+  // Activar tab
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+
+  activeFilter = el.dataset.cat;
+
+  // Cerrar card expandida si hay una abierta
+  if (expandedId) collapseCard(expandedId);
+
+  // Filtrar noticias
+  const filtradas = activeFilter === 'all' || activeFilter === 'semana'
+    ? newsData
+    : newsData.filter(n => n.cat === activeFilter);
+
+  // Actualizar título de sección
+  const titulo = document.querySelector('.section-title');
+  const labels = {
+    all: 'Noticias del día', semana: 'Esta semana',
+    argentina: 'Argentina', mundo: 'Mundo',
+    economia: 'Economía', tecnologia: 'Tecnología',
+    ciencia: 'Ciencia', salud: 'Salud',
+    cultura: 'Cultura', deportes: 'Deportes'
+  };
+  titulo.textContent = labels[activeFilter] || 'Noticias';
+
+  // Renderizar con animación
+  const grid = document.getElementById('newsGrid');
+  grid.style.opacity = '0';
+  grid.style.transform = 'translateY(6px)';
+  grid.style.transition = 'opacity 0.18s, transform 0.18s';
+
+  setTimeout(() => {
+    if (filtradas.length === 0) {
+      grid.innerHTML = `
+        <div style="grid-column:1/-1; text-align:center; padding:48px 24px; color:var(--text-3);">
+          <div style="font-size:32px; margin-bottom:10px;">📭</div>
+          <div style="font-size:14px; font-weight:500; color:var(--text-2); margin-bottom:6px;">Sin noticias en esta categoría</div>
+          <div style="font-size:13px;">Importá un JSON actualizado para ver contenido aquí.</div>
+        </div>`;
+    } else {
+      renderNews(filtradas);
+    }
+    grid.style.opacity = '1';
+    grid.style.transform = 'translateY(0)';
+  }, 120);
+
+  // Actualizar contador
+  const badge = document.getElementById('fechaBadge');
+  if (badge) {
+    if (activeFilter !== 'all' && activeFilter !== 'semana') {
+      badge.textContent = filtradas.length === 0
+        ? 'sin resultados'
+        : `${filtradas.length} ${filtradas.length === 1 ? 'noticia' : 'noticias'}`;
+    } else {
+      // Restaurar fecha
+      const ahora = new Date();
+      const dias = ['dom','lun','mar','mié','jue','vie','sáb'];
+      badge.textContent = `${dias[ahora.getDay()]} ${ahora.getDate()}/${String(ahora.getMonth()+1).padStart(2,'0')}`;
+    }
+  }
+}
+
+// ── BÚSQUEDA ──
+function doSearch(e) {
+  e.preventDefault();
+  const q = document.getElementById('searchInput').value.trim();
+  if (q) window.open(`https://www.google.com/search?q=${encodeURIComponent(q)}`, '_blank');
+}
+function quickSearch(q) {
+  document.getElementById('searchInput').value = q;
+  window.open(`https://www.google.com/search?q=${encodeURIComponent(q)}`, '_blank');
+}
+
+// ── DATO CURIOSO ──
+const curiosities = [
+  { cat:'🔭', text:'La Gran Mancha Roja de Júpiter es una tormenta que lleva girando más de 350 años. Su diámetro es casi el doble que el de la Tierra.' },
+  { cat:'🧬', text:'El ADN humano tiene 3.000 millones de pares de bases. Si lo estiraras, mediría 2 metros. En cada célula de tu cuerpo hay esos 2 metros enrollados.' },
+  { cat:'🏛', text:'La Biblioteca de Alejandría no fue destruida en un solo incendio. Se degradó lentamente durante siglos bajo distintos gobernantes.' },
+  { cat:'🌊', text:'El océano tiene más objetos históricos que todos los museos del mundo juntos. Se estiman más de 3 millones de naufragios en el fondo marino.' },
+  { cat:'💻', text:'El primer mensaje enviado por internet fue "LO". El investigador quería escribir "LOGIN" pero el sistema se cayó después de las dos primeras letras. Era 1969.' },
+  { cat:'🌍', text:'Rusia y EE.UU. están separados por solo 3,8 km en el Estrecho de Bering. Pero hay 21 horas de diferencia horaria entre ellas.' },
+  { cat:'🐜', text:'Las hormigas no duermen de corrido. Toman 250 siestas de 1 minuto por día, sumando unas 4,8 horas de sueño total diario.' }
+];
+let curIdx = 0;
+function nextCuriosity() {
+  curIdx = (curIdx + 1) % curiosities.length;
+  document.getElementById('curiosityCat').textContent = curiosities[curIdx].cat;
+  document.getElementById('curiosityText').textContent = curiosities[curIdx].text;
+}
+
+// ── LOAD MORE ──
+function loadMore() {
+  alert('Conectar con RSS / News API para cargar noticias en tiempo real.');
+}
+
+// ── FECHAS Y HORA ──
+function setFechas() {
+  const ahora = new Date();
+  const dias = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+  const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+
+  const diaNombre = dias[ahora.getDay()];
+  const diaNum    = ahora.getDate();
+  const mes       = meses[ahora.getMonth()];
+  const anio      = ahora.getFullYear();
+  const horas     = String(ahora.getHours()).padStart(2,'0');
+  const minutos   = String(ahora.getMinutes()).padStart(2,'0');
+  const mesNum    = String(ahora.getMonth()+1).padStart(2,'0');
+  const diaCorto  = diaNombre.slice(0,3);
+
+  // Topbar: "miércoles 25 de junio de 2026"
+  const topbarEl = document.getElementById('topbarFecha');
+  if (topbarEl) topbarEl.textContent = `${diaNombre} ${diaNum} de ${mes} de ${anio}`;
+
+  // Badge junto a "Noticias del día"
+  const fechaBadge = document.getElementById('fechaBadge');
+  if (fechaBadge) fechaBadge.textContent = `${diaCorto} ${diaNum}/${mesNum}`;
+
+  // Footer
+  const footerEl = document.getElementById('footerUpdate');
+  if (footerEl) footerEl.textContent = `Actualizado hoy · ${horas}:${minutos}`;
+}
+
+// ── INIT ──
+renderNews(newsData);
+setFechas();
+</script>
+</body>
+</html>
